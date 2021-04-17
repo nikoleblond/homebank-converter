@@ -162,6 +162,19 @@ function convertBnpParibasFortis(fields) {
   return (date + ";" + paymode + ";;;" + trimMemo(memo) + ";" + amount + ";;");
 }
 
+function convertBoursorama(fields) {
+  var date = moment(fields[0], 'YYYY-MM-DD');
+  if (!date.isValid()) {
+    throw new Error("Invalid date: " + fields[0]);
+  }
+  date = date.format('MM-DD-YY');
+  var memo = "";
+  memo += fields[2]
+  var paymode = getPayModeFromMemo(memo.toUpperCase());
+  var amount = fields[5];
+  return (date + ";" + paymode + ";;;" + trimMemo(memo) + ";" + amount + ";;");
+}
+
 function bank(name, encoding, firstField, minFieldCount, convertLine, separators, headSeparators) {
   // default
   this.convert = convert;
@@ -182,3 +195,4 @@ banks.push(new bank("Banque Postale", "ascii", "Date", 3, convertBanquePostale, 
 banks.push(new bank("BNP Paribas Fortis", "ascii", "Numéro de séquence", 8, convertBnpParibasFortis, { "csv": ";" }, null));
 banks.push(new bank("Boobank", "utf-8", "id", 9, convertBoobank, { "csv": ";" }, null));
 banks.push(new bank("PayPal", "ascii", "Date", 16, convertPaypal, { "csv": '","', "txt": '"\t"' }, { "csv": ',', "txt": '\t' }));
+banks.push(new bank("Boursorama",  "ascii", "dateOp", 10, convertBoursorama,  {"csv": ";" }, { "csv": ';'}));
