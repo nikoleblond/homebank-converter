@@ -169,10 +169,10 @@ function convertBoursorama(fields) {
   }
   date = date.format('MM-DD-YY');
   var memo = "";
-  memo += fields[2]
-  var paymode = getPayModeFromMemo(memo.toUpperCase());
+  var info = fields[2];
+  var paymode = getPayModeFromMemo(info.toUpperCase());
   var amount = fields[5];
-  return (date + ";" + paymode + ";;;" + trimMemo(memo) + ";" + amount + ";;");
+  return (date + ";" + paymode + ";" + info + ";;" + trimMemo(memo) + ";" + amount + ";;");
 }
 
 function bank(name, encoding, firstField, minFieldCount, convertLine, separators, headSeparators) {
